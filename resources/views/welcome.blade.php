@@ -1,17 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('partials.layout')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>welcome</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.3/dist/full.css" rel="stylesheet" type="text/css" />
-</head>
+@section('content')
+    <div class="container mx-auto">
+        <div class="flex flex-row flex-wrap">
+            @foreach($posts as $post)
+                <div class="basis-1/4 mb-2">
 
-<body>
-    <button class="btn btn-primary">bomzh</button>
+                    <div class="card bg-base-200 shadow-xl min-h-full mx-2">
+                        {{-- <figure>
+                            <img src="/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" />
+                        </figure> --}}
+                        <div class="card-body">
+                            <h2 class="card-title">{{ $post->title }}</h2>
+                            <p>{{ $post->snippet }}...</p>
+                            <p class="text-gray-500">{{ $post->created_at->diffForHumans() }}</p>
+                            <div class="card-actions justify-end">
+                                <button class="btn btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-</body>
+                </div>
+            @endforeach
+        </div>
 
-</html>
+    </div>
+@endsection
