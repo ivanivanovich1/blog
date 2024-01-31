@@ -11,13 +11,15 @@ use Illuminate\Support\Facades\Auth;
 
 class PublicController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $posts = Post::latest()->paginate(16);
         //dd($posts->toArray());
         return view('welcome', compact('posts'));
     }
 
-    public function feed(){
+    public function feed()
+    {
 
         $posts = Post::whereIn(
             'user_id',
@@ -27,11 +29,13 @@ class PublicController extends Controller
         return view('welcome', compact('posts'));
     }
 
-    public function post(Post $post){
+    public function post(Post $post)
+    {
         return view('post', compact('post'));
     }
 
-    public function comment(Post $post, Request $request){
+    public function comment(Post $post, Request $request)
+    {
         $comment = new Comment();
         $comment->body = $request->input('body');
         $comment->post()->associate($post);
@@ -40,9 +44,10 @@ class PublicController extends Controller
         return redirect()->back();
     }
 
-    public function like(Post $post){
+    public function like(Post $post)
+    {
         $like = $post->likes()->where('user_id', auth()->user()->id)->firstOrNew();
-        if($like->id === null){
+        if ($like->id === null) {
             $like->post()->associate($post);
             $like->user()->associate(auth()->user());
             $like->save();
@@ -52,12 +57,15 @@ class PublicController extends Controller
         return redirect()->back();
     }
 
-    public function user(User $user){
-        return view('user', compact('user'));
+    public function user(User $user)
+    {
+        $posts = $user->posts()->paginate(10);
+        return view('user', compact('user', "posts"));
     }
 
-    public function follow(User $user){
-        if(!$user->authHasFollowed){
+    public function follow(User $user)
+    {
+        if (!$user->authHasFollowed) {
             $user->followers()->attach(auth()->user());
         } else {
             $user->followers()->detach(auth()->user());
